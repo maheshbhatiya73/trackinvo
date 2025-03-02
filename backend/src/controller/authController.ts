@@ -1,0 +1,110 @@
+import { Request, Response } from 'express';
+import User, { IUser } from '../model/user';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+
+const JWT_SECRET = process.env.JWT_SECRET || 'mahesh123';
+
+export default class AuthController {
+    
+    static async register(req: Request, res: Response): Promise<void> {
+        try {
+            const { username, email, password, role } = req.body;
+            if (!username || !email || !password) {
+                res.status(400).json({ 
+                    message: "Please provide all required fields: username, email, and password" 
+                });
+                return;
+            }
+            if (username.length < 3) {
+                res.status(400).json({ 
+                    message: "Username must be at least 3 characters long" 
+                });
+                return;
+            }
+    
+            if (!email.includes('@') || !email.includes('.')) {
+                res.status(400).json({ 
+                    message: "Please provide a valid email address" 
+                });
+                return;
+            }
+    
+            if (password.length < 6) {
+                res.status(400).json({ 
+                    message: "Password must be at least 6 characters long" 
+                });
+                return;
+            }
+            const existingUser = await User.findOne({ $or: [{ email }, { username }] });
+            if (existingUser) {
+                res.status(400).json({ 
+                    message: existingUser.email === email 
+                        ? "Email already exists" 
+                        : "Username already exists" 
+                });
+                return;
+            }
+    
+            const hashedPassword = await bcrypt.hash(password, 10);
+            const user = new User({
+                username,
+                email,
+                password: hashedPassword,
+                role: role || 'user' 
+            });
+    
+            await user.save();
+    
+            res.status(201).json({ 
+                message: 'User registered successfully',
+                user: {
+                    id: user._id,
+                    username: user.username,
+                    email: user.email,
+                    role: user.role
+                }
+            });
+        } catch (error) {
+            console.error('Registration error:', error);
+            res.status(500).json({ 
+                message: 'Server error during registration',
+                error: error instanceof Error ? error.message : 'Unknown error'
+            });
+        }
+    }
+
+    static async login(req: Request, res: Response): Promise<void> {
+        try {
+            const { email, password } = req.body;
+            const user = await User.findOne({ email });
+            if (!user) {
+                res.status(400).json({ message: 'Invalid credentials' });
+                return;
+            }
+            const isMatch = await bcrypt.compare(password, user.password);
+            if (!isMatch) {
+                res.status(400).json({ message: 'Invalid credentials' });
+                return;
+            }
+            const token = jwt.sign(
+                { id: user._id, role: user.role },
+                JWT_SECRET,
+                { expiresIn: '1h' }
+            );
+
+            res.status(200).json({
+                message: 'Login successful',
+                token,
+                user: {
+                    id: user._id,
+                    username: user.username,
+                    email: user.email,
+                    role: user.role
+                }
+            });
+        } catch (error) {
+            res.status(500).json({ message: 'Server error', error });
+        }
+    }
+}
