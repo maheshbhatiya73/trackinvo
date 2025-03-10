@@ -4,6 +4,15 @@ import { FiHome, FiFileText, FiUsers, FiSettings, FiDollarSign, FiPieChart, FiLo
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
+import { MdAddChart, MdOutlineCategory, MdOutlineProductionQuantityLimits } from 'react-icons/md';
+import { TbFileInvoice, TbListDetails } from 'react-icons/tb';
+import { AiOutlineDeploymentUnit } from 'react-icons/ai';
+import { LuLayoutTemplate, LuSquareUserRound } from 'react-icons/lu';
+import { FaDotCircle, FaVoicemail } from 'react-icons/fa';
+import { GoChecklist } from 'react-icons/go';
+import { HiOutlineMail } from 'react-icons/hi';
+import { IoDocumentsOutline, IoSettingsOutline } from 'react-icons/io5';
+import { CiMoneyCheck1 } from 'react-icons/ci';
 
 // Type definitions for menu items
 interface SubMenuItem {
@@ -25,7 +34,7 @@ const Sidebar = () => {
   const [openMenu, setOpenMenu] = useState<string | null>(null);
 
   const menuItems: MenuItem[] = [
-    { name: 'Dashboard', icon: FiHome, path: '/' },
+    { name: 'Dashboard', icon: FiHome, path: '/dashboard' },
     {
       name: 'Administrator',
       icon: FiUsers,
@@ -34,6 +43,56 @@ const Sidebar = () => {
         { name: 'Users', icon: FiUser, path: '/dashboard/administrator/users' },
       ],
     },
+    {
+      name: 'Products',
+      icon: MdOutlineProductionQuantityLimits,
+      subMenu: [
+        { name: "Product list", icon: TbListDetails, path: '/dashboard/products'},
+        { name: "categories", icon: MdOutlineCategory, path: '/dashboard/products/categories'},
+        { name: "units", icon: AiOutlineDeploymentUnit, path: '/dashboard/products/units'}
+      ]
+    },
+    {
+      name: "Customers",
+      icon: LuSquareUserRound,
+      path: "/dashboard/customers"
+    },
+    {
+      name: "Invoices",
+      icon: TbFileInvoice,
+      subMenu: [
+        { name: "add invoice", icon: MdAddChart, path: '/dashboard/invoices/add'},
+        { name: "invoices list", icon: GoChecklist, path: '/dashboard/invoices'},
+      ]
+    },
+    {
+      name: "quotations",
+      icon: IoDocumentsOutline,
+      subMenu: [
+        { name: "add quotation", icon: MdAddChart, path: '/dashboard/quotation/add'},
+        { name: "quotation list", icon: GoChecklist, path: '/dashboard/quotation'},
+      ]
+    },
+    {
+      name: "transactions",
+      icon: CiMoneyCheck1,
+      path: "/dashboard/transactions"
+    },
+    {
+      name: "templates",
+      icon: LuLayoutTemplate,
+      path: "/dashboard/templates"
+    },
+    {
+      name: "Email Templates",
+      icon: HiOutlineMail,
+      path: '/dashboard/email_template'
+    },
+    {
+      name: "Settings",
+      icon: IoSettingsOutline,
+      path: "/dashboard/Settings"
+    }
   ];
 
   // Automatically open the submenu if the current path matches a submenu item
@@ -128,16 +187,6 @@ const Sidebar = () => {
           );
         })}
       </nav>
-      <div className="border-t border-gray-100 p-4">
-        <motion.button
-          whileHover={{ x: 5 }}
-          onClick={handleLogout}
-          className="flex items-center space-x-3 w-full p-3 rounded-lg hover:bg-red-50 group transition-colors"
-        >
-          <FiLogOut className="w-5 h-5 text-gray-600 group-hover:text-red-600" />
-          <span className="text-sm font-medium text-gray-700 group-hover:text-red-600">Log Out</span>
-        </motion.button>
-      </div>
     </div>
   );
 };

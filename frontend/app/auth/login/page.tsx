@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
 import { api, setAuthData } from '@/app/lib/api';
 import Loader from '@/app/components/loader';
+import { useToast } from '@/app/Context/ToastContext';
 
 const LoginPage = () => {
   const router = useRouter();
@@ -13,6 +14,8 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const { showToast } = useToast();
+  
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -20,8 +23,8 @@ const LoginPage = () => {
     setError('');
 
     try {
-      const data = await api.login(email, password);
-      setAuthData(data.token, data.userId);
+      const data = await api.login(email, password, showToast);
+      setAuthData(data.token, data.user.id);
       
       router.push('/dashboard');
     } catch (err) {

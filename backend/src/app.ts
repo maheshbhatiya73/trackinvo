@@ -4,6 +4,13 @@ import cors from 'cors';
 import SuperAdminRoute from './routes/SuperAdminRoute';
 import checksuperadmin from './utils/checkSuperadmin';
 import authRoutes from './routes/authRoutes';
+import categoryRouter from './routes/CategoryRoute';
+import unitRouter from './routes/UnitRoute';
+import productRouter from './routes/ProductRoute';
+import customerRouter from './routes/CustomerRoute';
+import invoiceRouter from './routes/InvoiceRoute';
+import path from 'path';
+import QuotationRoute from './routes/QuotationRoute';
 
 class App {
     private app: Express;
@@ -24,7 +31,12 @@ class App {
             methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
             allowedHeaders: ['Content-Type', 'Authorization'],
         }));
+
+        this.app.use(express.urlencoded({ extended: true }));
         this.app.use(express.json());
+        const uploadsPath = path.resolve(__dirname, '../uploads');
+        console.log('Serving uploads from:', uploadsPath);  // Debugging log
+        this.app.use('/uploads', express.static(uploadsPath));
     }
 
     private configureRoutes(): void {
@@ -36,7 +48,13 @@ class App {
             });
         });
         this.app.use('/api/auth', authRoutes);
-        this.app.use('/api/superadmin', SuperAdminRoute)
+        this.app.use('/api/superadmin', SuperAdminRoute);
+        this.app.use('/api/categories', categoryRouter);
+        this.app.use('/api/units', unitRouter);
+        this.app.use('/api/products', productRouter);
+        this.app.use('/api/customers', customerRouter);
+        this.app.use('/api/invoices', invoiceRouter);
+        this.app.use('/api/quotation', QuotationRoute)
     }
 
     public async start(): Promise<void> {

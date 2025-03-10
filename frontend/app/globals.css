@@ -35,7 +35,7 @@ body {
 
   /* Inner circle: 1 second */
   .spin-inner {
-      animation: spin 1.4s linear infinite;
+      animation: spin 5.6s linear infinite;
   }
 
   /* Keyframes for the spin animation */

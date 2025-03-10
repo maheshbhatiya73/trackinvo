@@ -1,21 +1,22 @@
-'use client'; 
+"use client";
 import { getToken } from '@/app/lib/api';
 import { motion } from 'framer-motion';
 import { useMotionValue, useTransform } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { TbInvoice } from 'react-icons/tb';
 
 const Header = () => {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-  const router = useRouter()
+  const router = useRouter();
   const rotateX = useTransform(y, [-100, 100], [10, -10]);
   const rotateY = useTransform(x, [-100, 100], [-10, 10]);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     const token = getToken();
-    setIsAuthenticated(!!token); 
+    setIsAuthenticated(!!token);
   }, []);
 
   const handleMouseMove = (event: any) => {
@@ -34,6 +35,7 @@ const Header = () => {
 
   return (
     <header className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 relative overflow-hidden">
+      {/* Background Elements */}
       <motion.div
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
@@ -54,6 +56,7 @@ const Header = () => {
         className="absolute w-64 h-64 border-4 border-cyan-300/20 rounded-full -top-32 -right-32"
       />
 
+      {/* Navigation */}
       <nav className="container mx-auto px-6 py-8 relative z-10">
         <div className="flex items-center justify-between">
           <motion.div
@@ -63,7 +66,8 @@ const Header = () => {
             className="flex items-center space-x-2"
           >
             <div className="w-8 h-8 bg-cyan-400 rounded-full flex items-center justify-center">
-              <span className="text-white font-bold">$</span>
+              <span className="text-white font-bold"><TbInvoice />
+              </span>
             </div>
             <span className="text-white text-2xl font-bold">TrackInvo</span>
           </motion.div>
@@ -92,63 +96,95 @@ const Header = () => {
           </div>
         </div>
       </nav>
-      <div className="container mx-auto px-6 relative z-10 pt-32">
-        <div className="max-w-4xl">
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-5xl md:text-7xl font-bold text-white mb-8 leading-tight"
-          >
-            Revolutionize Your 
-            <motion.span
-              initial={{ backgroundSize: '0% 100%' }}
-              animate={{ backgroundSize: '100% 100%' }}
-              transition={{ duration: 1.5, delay: 0.5 }}
-              className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent bg-[length:100%_100%]"
+
+      {/* Main Content */}
+      <div className="container px-6 relative z-10 pt-20">
+        <div className="flex flex-row lg:flex-row items-center justify-between ">
+          {/* Left Side - Text Content */}
+          <div className="lg:w-1/2 max-w-2xl">
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="text-5xl md:text-7xl font-bold text-white mb-8 leading-tight"
             >
-              {' '}Invoice Management
-            </motion.span>
-          </motion.h1>
+              Revolutionize Your
+              <motion.span
+                initial={{ backgroundSize: '0% 100%' }}
+                animate={{ backgroundSize: '100% 100%' }}
+                transition={{ duration: 1.5, delay: 0.5 }}
+                className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent bg-[length:100%_100%]"
+              >
+                {' '}Invoice Management
+              </motion.span>
+            </motion.h1>
 
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8 }}
-            className="text-xl text-gray-200 mb-12 max-w-2xl"
-          >
-            Transform your billing process with AI-powered invoice tracking, automated reminders, and real-time analytics.
-          </motion.p>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.8 }}
+              className="text-xl text-gray-200 mb-12"
+            >
+              Transform your billing process with AI-powered invoice tracking, automated reminders, and real-time analytics.
+            </motion.p>
 
+            <motion.div
+              onMouseMove={handleMouseMove}
+              style={{ rotateX, rotateY }}
+              className="inline-block perspective"
+            >
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-8 py-4 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-xl text-white font-semibold text-lg shadow-2xl hover:shadow-cyan-400/40 relative overflow-hidden"
+              >
+                <span className="relative z-10 flex items-center">
+                  Start Free Trial
+                  <motion.span
+                    className="ml-3"
+                    whileHover={{ x: 5 }}
+                  >
+                    →
+                  </motion.span>
+                </span>
+                <motion.div
+                  className="absolute inset-0 bg-white/10"
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1.5, opacity: 0 }}
+                  transition={{ repeat: Infinity, duration: 1.5 }}
+                />
+              </motion.button>
+            </motion.div>
+          </div>
+
+          {/* Right Side - Image Container */}
           <motion.div
-            onMouseMove={handleMouseMove}
-            style={{ rotateX, rotateY }}
-            className="inline-block perspective"
+            initial={{ opacity: 0, x: 100 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1, delay: 0.5 }}
+            className="lg:w-1/3 mt-12 lg:mt-0 "
           >
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-8 py-4 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-xl text-white font-semibold text-lg shadow-2xl hover:shadow-cyan-400/40 relative overflow-hidden"
-            >
-              <span className="relative z-10 flex items-center">
-                Start Free Trial
-                <motion.span
-                  className="ml-3"
-                  whileHover={{ x: 5 }}
-                >
-                  →
-                </motion.span>
-              </span>
+            <div className="relative max-w-md mx-auto lg:mx-0">
+              {/* Image Container with Decorative Elements */}
               <motion.div
-                className="absolute inset-0 bg-white/10"
-                initial={{ scale: 0 }}
-                animate={{ scale: 1.5, opacity: 0 }}
-                transition={{ repeat: Infinity, duration: 1.5 }}
+                className="absolute -inset-4 bg-gradient-to-r from-cyan-400/20 to-blue-500/20 rounded-3xl blur-xl"
+                animate={{ scale: [1, 1.05, 1] }}
+                transition={{ duration: 3, repeat: Infinity }}
               />
-            </motion.button>
+              <motion.img
+                src="https://virtualtrader.com/wp-content/uploads/2024/06/E-InvoicingSquare.png" // Replace with your preferred image URL
+                alt="Invoice Management"
+                className="relative z-10 w-full rounded-2xl shadow-2xl"
+                whileHover={{ scale: 1.03 }}
+                transition={{ duration: 0.3 }}
+              />
+              {/* Floating Card Effect */}
+              
+            </div>
           </motion.div>
         </div>
       </div>
+
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

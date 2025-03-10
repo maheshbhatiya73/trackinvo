@@ -6,6 +6,10 @@ export interface IUser extends Document {
     email: string;
     password: string;
     role: 'user' | 'admin' | 'superadmin';
+    status: "active" | 'inactive';
+    avatar: string;
+    lastLogin: string;
+    
 }
 
 interface IUserModel extends Model<IUser> {
@@ -31,24 +35,32 @@ const UserSchema: Schema = new Schema({
         type: String,
         enum: ['user', 'admin', 'superadmin'],
         default: 'user'
-    }
+    },
+    status: {
+        type: String,
+        enum: ["active", "inactive"],
+        default: 'active'
+    },
+    avatar: { type: String, required: false },
+    lastLogin: { type: String, required: false },
 }, {
     timestamps: true
 });
 
-UserSchema.statics.createDefaultSuperadmin = async function() {
+UserSchema.statics.createDefaultSuperadmin = async function () {
     try {
         const superadminExists = await this.findOne({ role: 'superadmin' });
         if (!superadminExists) {
             const hashedPassword = await bcrypt.hash('mahesh123', 10);
-            
+
             const superadmin = new this({
                 username: 'mahesh bhatiya',
                 email: 'maheshbhatiya304@gmail.com',
                 password: hashedPassword,
-                role: 'superadmin'
+                role: 'superadmin',
+                status: "active"
             });
-            
+
             await superadmin.save();
             console.log('Default superadmin created');
             return superadmin;

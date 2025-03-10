@@ -7,6 +7,10 @@ interface ManagerRequestBody {
   name: string;
   email: string;
   password: string;
+  role: string;
+  status: string;
+  avatar: string;
+  lastLogin: string
 }
 
 interface UserRequestBody {
@@ -15,17 +19,38 @@ interface UserRequestBody {
   username: string;
   role?: 'user' | 'admin' | 'superadmin';
   password?: string;
+  avatar?: string;
 }
 
 class SuperAdminController {
   static async createManager(req: Request<{}, {}, ManagerRequestBody>, res: Response): Promise<void> {
     try {
-      const { name, email, password } = req.body;
-      if (!name || !email || !password) {
-        res.status(400).json({ message: 'Name, email, and password are required' });
+      const { name, email, password, role, status, lastLogin } = req.body;
+      const avatar = req.file ? `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}` : null;
+
+      if (!name || !email || !password || !role || !status || !avatar) {
+        res.status(400).json({ message: 'All required fields (name, email, password, role, status, avatar) must be provided' });
         return;
       }
-      const manager = new Manager({ name, email, password });
+
+      const existingManager = await Manager.findOne({ email });
+      if (existingManager) {
+        res.status(400).json({ message: 'Email already in use' });
+        return;
+      }
+
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      const manager = new Manager({
+        name,
+        email,
+        password: hashedPassword,
+        role,
+        status,
+        lastLogin,
+        avatar, 
+      });
+
       await manager.save();
       res.status(201).json({ message: 'Manager created successfully', manager });
     } catch (error) {
@@ -35,7 +60,7 @@ class SuperAdminController {
 
   static async getAllManagers(req: Request, res: Response): Promise<void> {
     try {
-      const managers = await Manager.find();
+      const managers = await Manager.find().select('-password');
       res.status(200).json({ message: 'Managers retrieved successfully', managers });
     } catch (error) {
       res.status(500).json({ message: 'Error retrieving managers', error: (error as Error).message });
@@ -55,20 +80,33 @@ class SuperAdminController {
       res.status(500).json({ message: 'Error retrieving manager', error: (error as Error).message });
     }
   }
-
-  static async updateManager(req: Request<{ id: string }, {}, Partial<ManagerRequestBody>>, res: Response): Promise<void> {
+  static async updateManager(
+    req: Request<{ id: string }, {}, Partial<ManagerRequestBody>>,
+    res: Response
+  ): Promise<void> {
     try {
       const { id } = req.params;
-      const updatedManager = await Manager.findByIdAndUpdate(id, req.body, { new: true, runValidators: true });
+  
+      // Handle avatar upload
+      const avatar = req.file ? `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}` : undefined;
+  
+      // Prepare update data
+      const updateData = { ...req.body };
+      if (avatar) updateData.avatar = avatar; // Add avatar only if it exists
+  
+      // Update manager
+      const updatedManager = await Manager.findByIdAndUpdate(id, updateData, { new: true, runValidators: true });
+  
       if (!updatedManager) {
         res.status(404).json({ message: 'Manager not found' });
         return;
       }
+  
       res.status(200).json({ message: 'Manager updated successfully', manager: updatedManager });
     } catch (error) {
       res.status(400).json({ message: 'Error updating manager', error: (error as Error).message });
     }
-  }
+  }  
 
   static async deleteManager(req: Request<{ id: string }>, res: Response): Promise<void> {
     try {
@@ -87,6 +125,9 @@ class SuperAdminController {
   static async createUser(req: Request<{}, {}, UserRequestBody>, res: Response): Promise<void> {
     try {
       const { username, email, password, role } = req.body;
+      console.log(req.body)
+      const avatar = req.file ? `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}` : null;
+
 
       if (!username || !email || !password) {
         res.status(400).json({ message: 'Username, email, and password are required' });
@@ -104,6 +145,7 @@ class SuperAdminController {
         username,
         email,
         password: hashedPassword,
+        avatar,
         role: role || 'user'
       });
 
@@ -140,7 +182,13 @@ class SuperAdminController {
   static async updateUser(req: Request<{ id: string }, {}, Partial<UserRequestBody>>, res: Response): Promise<void> {
     try {
       const { id } = req.params;
-      const updatedUser = await User.findByIdAndUpdate(id, req.body, { new: true, runValidators: true }).select('-password');
+      const avatar = req.file ? `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}` : undefined;
+  
+      // Prepare update data
+      const updateData = { ...req.body };
+      if (avatar) updateData.avatar = avatar;
+
+      const updatedUser = await User.findByIdAndUpdate(id, updateData, { new: true, runValidators: false });
       if (!updatedUser) {
         res.status(404).json({ message: 'User not found' });
         return;
