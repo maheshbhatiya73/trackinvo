@@ -160,7 +160,8 @@ const Pricing = () => {
               key={plan.plan}
               {...plan}
               delay={index * 0.15}
-              price={annualBilling ? (plan.price * 0.8).toFixed(0) : plan.price}
+              price={annualBilling ? (Number(plan.price) * 0.8).toFixed(0) : plan.price}
+
             />
           ))}
         </div>

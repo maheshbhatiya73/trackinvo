@@ -1,14 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
-// Define JWT payload interface
 export interface JwtPayload {
     id: string;
     role: string;
     [key: string]: any;
 }
 
-// Extend Express request to include `user` property
 declare global {
     namespace Express {
         interface Request {

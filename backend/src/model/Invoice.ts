@@ -1,4 +1,3 @@
-// models/Invoice.ts
 import mongoose, { Schema, Document } from 'mongoose';
 
 interface IProductItem {
@@ -56,7 +55,7 @@ const InvoiceSchema: Schema = new Schema({
   deleted: { type: Boolean, default: false },
 });
 
-// Pre-save middleware to calculate total_amount
+
 InvoiceSchema.pre('save', function (next) {
   const invoice = this as unknown as IInvoice;
   let subtotal = invoice.products.reduce((sum, item) => sum + item.total_amount, 0);

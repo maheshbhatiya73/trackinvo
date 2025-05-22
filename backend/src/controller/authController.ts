@@ -114,7 +114,7 @@ export default class AuthController {
                     username: user.username,
                     email: user.email,
                     role: user.role,
-                    lastLogin: user.lastLogin // Optional: include in response
+                    lastLogin: user.lastLogin 
                 }
             });
         } catch (error) {

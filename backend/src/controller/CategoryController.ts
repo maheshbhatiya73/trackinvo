@@ -1,4 +1,4 @@
-// controller/CategoryController.ts
+
 import { Request, Response } from 'express';
 import Category from '../model/Category';
 
@@ -53,13 +53,11 @@ class CategoryController {
   static async deleteCategory(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      // Soft Delete
       const category = await Category.findOneAndUpdate(
         { _id: id, deleted: false },
         { deleted: true, updated_at: new Date() },
         { new: true }
       );
-      // Hard Delete alternative: await Category.findByIdAndDelete(id);
       if (!category) return res.status(404).json({ status: 'error', message: 'Category not found' });
       res.status(204).send();
     } catch (error: any) {

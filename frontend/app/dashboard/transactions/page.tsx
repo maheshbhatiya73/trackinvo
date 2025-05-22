@@ -58,7 +58,6 @@ export default function TransactionList() {
             backgroundImage: `linear-gradient(to right, ${themeColor}, #9333ea)`,
             WebkitBackgroundClip: "text",
             backgroundClip: "text",
-            color: "transparent",
           }}
         >
           Transaction List
@@ -100,9 +99,7 @@ export default function TransactionList() {
               borderTop: "1px solid #E5E7EB",
               backgroundColor: "#FFFFFF",
               transition: "background-color 0.2s ease",
-              ":hover": {
-                backgroundColor: "#F9FAFB",
-              },
+              
             }}
           >
             <div

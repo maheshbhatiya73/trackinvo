@@ -51,11 +51,11 @@ UserSchema.statics.createDefaultSuperadmin = async function () {
     try {
         const superadminExists = await this.findOne({ role: 'superadmin' });
         if (!superadminExists) {
-            const hashedPassword = await bcrypt.hash('mahesh123', 10);
+            const hashedPassword = await bcrypt.hash('superadmin123', 10);
 
             const superadmin = new this({
-                username: 'mahesh bhatiya',
-                email: 'maheshbhatiya304@gmail.com',
+                username: 'super admin',
+                email: 'superadmin@gmail.com',
                 password: hashedPassword,
                 role: 'superadmin',
                 status: "active"

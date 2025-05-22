@@ -36,7 +36,7 @@ const ManagersTable = () => {
   };
   const router = useRouter();
   const { showToast } = useToast();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<any>({
     name: '',
     email: '',
     password: '',
@@ -67,10 +67,10 @@ const ManagersTable = () => {
 
   useEffect(() => {
     let filtered = [...managersData];
-    
+
     // Apply search filter
     if (searchTerm) {
-      filtered = filtered.filter(manager => 
+      filtered = filtered.filter(manager =>
         manager.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         manager.email.toLowerCase().includes(searchTerm.toLowerCase())
       );
@@ -92,7 +92,7 @@ const ManagersTable = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev: any) => ({ ...prev, [name]: value }));
     setFormErrors((prev) => ({ ...prev, [name]: '' }));
   };
 
@@ -251,7 +251,7 @@ const ManagersTable = () => {
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Actions</th>
                 </tr>
               </thead>
-             <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-gray-200">
                 {currentManagers.map((manager: any) => (
                   <tr key={manager._id} className="hover:bg-gray-50 transition-colors">
                     <td className="px-6 py-4">
@@ -279,14 +279,14 @@ const ManagersTable = () => {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-gray-600">
-                      {manager.lastLogin 
+                      {manager.lastLogin
                         ? new Date(manager.lastLogin).toLocaleString('en-US', {
-                            year: 'numeric',
-                            month: 'short',
-                            day: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit'
-                          })
+                          year: 'numeric',
+                          month: 'short',
+                          day: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })
                         : 'Never'}
                     </td>
                     <td className="px-6 py-4">
@@ -307,31 +307,31 @@ const ManagersTable = () => {
               </tbody>
             </table>
             {filteredManagers.length > 0 && (
-            <div className="flex justify-between items-center p-4">
-              <div className="text-sm text-gray-600">
-                Showing {indexOfFirstManager + 1} to {Math.min(indexOfLastManager, filteredManagers.length)} of {filteredManagers.length} managers
+              <div className="flex justify-between items-center p-4">
+                <div className="text-sm text-gray-600">
+                  Showing {indexOfFirstManager + 1} to {Math.min(indexOfLastManager, filteredManagers.length)} of {filteredManagers.length} managers
+                </div>
+                <div className="flex space-x-2">
+                  <Button
+                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                    disabled={currentPage === 1}
+                    className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg disabled:opacity-50"
+                  >
+                    Previous
+                  </Button>
+                  <span className="px-4 py-2 text-gray-700">
+                    Page {currentPage} of {totalPages}
+                  </span>
+                  <Button
+                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                    disabled={currentPage === totalPages}
+                    className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg disabled:opacity-50"
+                  >
+                    Next
+                  </Button>
+                </div>
               </div>
-              <div className="flex space-x-2">
-                <Button
-                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                  disabled={currentPage === 1}
-                  className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg disabled:opacity-50"
-                >
-                  Previous
-                </Button>
-                <span className="px-4 py-2 text-gray-700">
-                  Page {currentPage} of {totalPages}
-                </span>
-                <Button
-                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                  disabled={currentPage === totalPages}
-                  className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg disabled:opacity-50"
-                >
-                  Next
-                </Button>
-              </div>
-            </div>
-          )}
+            )}
           </div>
         </div>
       </div>
@@ -349,7 +349,7 @@ const ManagersTable = () => {
         width="700px"
         showCloseButton={true}
         onProcess={CreateManager}
-      >
+        processLabel={''}      >
         <div className="space-y-2">
           <div className="flex flex-col items-center justify-center space-y-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">Profile Avatar</label>
@@ -457,7 +457,7 @@ const ManagersTable = () => {
               { value: 'Support', label: 'Support' },
             ]}
             value={formData.role}
-            onChange={(value) => setFormData((prev) => ({ ...prev, role: value }))}
+            onChange={(value) => setFormData((prev: any) => ({ ...prev, role: value }))}
             placeholder="Select a role"
           />
           <Dropdown
@@ -466,7 +466,7 @@ const ManagersTable = () => {
               { value: 'inactive', label: 'Inactive' },
             ]}
             value={formData.status}
-            onChange={(value) => setFormData((prev) => ({ ...prev, status: value }))}
+            onChange={(value) => setFormData((prev: any) => ({ ...prev, status: value }))}
             placeholder="Select a status"
           />
         </div>
@@ -483,8 +483,8 @@ const ManagersTable = () => {
         title="Edit Manager"
         width="700px"
         showCloseButton={true}
-        onProcess={EditManager}
-      >
+        onProcess={EditManager} 
+        processLabel={''}      >
         <div className="space-y-2">
           <div className="flex flex-col items-center justify-center space-y-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">Profile Avatar</label>
@@ -582,7 +582,7 @@ const ManagersTable = () => {
               { value: 'Support', label: 'Support' },
             ]}
             value={formData.role}
-            onChange={(value) => setFormData((prev) => ({ ...prev, role: value }))}
+            onChange={(value) => setFormData((prev: any) => ({ ...prev, role: value }))}
             placeholder="Select a role"
           />
           <Dropdown
@@ -591,7 +591,7 @@ const ManagersTable = () => {
               { value: 'inactive', label: 'Inactive' },
             ]}
             value={formData.status}
-            onChange={(value) => setFormData((prev) => ({ ...prev, status: value }))}
+            onChange={(value) => setFormData((prev: any) => ({ ...prev, status: value }))}
             placeholder="Select a status"
           />
         </div>
@@ -608,7 +608,7 @@ const ManagersTable = () => {
         width="400px"
         showCloseButton={true}
         onProcess={confirmDeleteManager} // Call delete API on confirmation
-      >
+        processLabel={''}      >
         <div className="text-center">
           <p className="text-gray-700 mb-2">
             Are you sure you want to delete this manager? This action cannot be undone.

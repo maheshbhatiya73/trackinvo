@@ -1,4 +1,3 @@
-// controller/ProductController.ts
 import { Request, Response } from 'express';
 import Product from '../model/Product';
 
@@ -55,13 +54,11 @@ class ProductController {
   static async deleteProduct(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      // Soft Delete
       const product = await Product.findOneAndUpdate(
         { _id: id, deleted: false },
         { deleted: true, updated_at: new Date() },
         { new: true }
       );
-      // Hard Delete alternative: await Product.findByIdAndDelete(id);
       if (!product) return res.status(404).json({ status: 'error', message: 'Product not found' });
       res.status(204).send();
     } catch (error: any) {

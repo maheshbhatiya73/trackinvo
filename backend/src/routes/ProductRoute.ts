@@ -1,4 +1,3 @@
-// routes/ProductRoute.ts
 import express from 'express';
 import ProductController from '../controller/ProductController';
 import { authenticateToken, checkRole } from '../middleware/auth';

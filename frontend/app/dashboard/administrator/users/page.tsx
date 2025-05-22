@@ -18,13 +18,13 @@ interface User {
   status: 'active' | 'inactive';
   lastLogin?: string | null;
   createdAt: string;
-  avatar: string;
+  avatar: any;
   updatedAt: string;
   __v: number;
 }
 
 interface FormData {
-  avatar: React.JSX.Element;
+  avatar: any;
   username: string;
   email: string;
   password: string;
@@ -143,7 +143,6 @@ const UserTable = () => {
           formData.password,
           formData.role,
           formData.status,
-          null,
           avatarFile,
           showToast
         );

@@ -1,4 +1,3 @@
-// routes/UnitRoute.ts
 import express from 'express';
 import UnitController from '../controller/UnitController';
 import { authenticateToken, checkRole } from '../middleware/auth';

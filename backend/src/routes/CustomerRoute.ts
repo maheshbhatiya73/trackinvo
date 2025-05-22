@@ -1,4 +1,3 @@
-// routes/CustomerRoute.ts
 import express from 'express';
 import CustomerController from '../controller/CustomerController';
 import { authenticateToken, checkRole } from '../middleware/auth';

@@ -12,7 +12,7 @@ class Database {
         try {
             await mongoose.connect(this.uri);
     
-            this.connection = mongoose.connection; // Ensure `this.connection` is assigned properly
+            this.connection = mongoose.connection;
             
             this.connection.on('error', (err) => console.error('MongoDB Connection Error:', err));
             this.connection.once('open', () => console.log(`Database connected to ${this.uri}`));

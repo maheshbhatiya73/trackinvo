@@ -1,4 +1,3 @@
-// routes/InvoiceRoute.ts
 import express from 'express';
 import InvoiceController from '../controller/InvoiceController';
 import { authenticateToken, checkRole } from '../middleware/auth';

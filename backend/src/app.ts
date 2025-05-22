@@ -2,7 +2,7 @@ import express, { Express, Request, Response } from 'express';
 import Database from './config/db';
 import cors from 'cors';
 import SuperAdminRoute from './routes/SuperAdminRoute';
-import checksuperadmin from './utils/checkSuperadmin';
+import checksuperadmin from './utils/checksuperadmin';
 import authRoutes from './routes/authRoutes';
 import categoryRouter from './routes/CategoryRoute';
 import unitRouter from './routes/UnitRoute';
@@ -11,15 +11,16 @@ import customerRouter from './routes/CustomerRoute';
 import invoiceRouter from './routes/InvoiceRoute';
 import path from 'path';
 import QuotationRoute from './routes/QuotationRoute';
+import 'dotenv/config';
 
 class App {
     private app: Express;
-    private port: number = 8080;
+    private port: number = Number(process.env.PORT) || 8080;
     private db: Database;
 
     constructor() {
         this.app = express();
-        const uri = "mongodb+srv://sparkvision73:trackinvo12@cluster0.a56ml.mongodb.net/trackinvo?retryWrites=true&w=majority&appName=Cluster0";
+        const uri = process.env.MONGODB_URI || "localhost";
         this.db = new Database(uri);
         this.configureMiddleware();
         this.configureRoutes();
@@ -27,7 +28,7 @@ class App {
 
     private configureMiddleware(): void {
         this.app.use(cors({
-            origin: 'http://localhost:3000',
+            origin: process.env.CLIENT_URL || 'http://localhost:3000',
             methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
             allowedHeaders: ['Content-Type', 'Authorization'],
         }));
@@ -35,7 +36,7 @@ class App {
         this.app.use(express.urlencoded({ extended: true }));
         this.app.use(express.json());
         const uploadsPath = path.resolve(__dirname, '../uploads');
-        console.log('Serving uploads from:', uploadsPath);  // Debugging log
+        console.log('Serving uploads from:', uploadsPath); 
         this.app.use('/uploads', express.static(uploadsPath));
     }
 

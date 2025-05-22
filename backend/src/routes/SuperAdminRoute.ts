@@ -30,17 +30,14 @@ class SuperAdminRoute {
 
 
   initializeRoutes() {
-    // Apply authentication to all routes
     this.router.use(authenticateToken);
-
-    // Manager Routes
+    
     this.router.post('/managers', checkRole([ROLES.SUPERADMIN]), upload.single('avatar'), SuperAdminController.createManager);
     this.router.get('/managers', checkRole([ROLES.SUPERADMIN]),  SuperAdminController.getAllManagers);
     this.router.get('/managers/:id', checkRole([ROLES.SUPERADMIN]),  SuperAdminController.getManagerById);
     this.router.put('/managers/:id', checkRole([ROLES.SUPERADMIN]), upload.single('avatar'), SuperAdminController.updateManager);
     this.router.delete('/managers/:id', checkRole([ROLES.SUPERADMIN]),  SuperAdminController.deleteManager);
 
-    // User Routes
     this.router.post('/users', checkRole([ROLES.SUPERADMIN]), upload.single('avatar'), SuperAdminController.createUser);
     this.router.get('/users', checkRole([ROLES.SUPERADMIN, ROLES.MANAGER]), upload.single('avatar'), SuperAdminController.getAllUsers);
     this.router.get('/users/:id', checkRole([ROLES.SUPERADMIN, ROLES.MANAGER]), upload.single('avatar'), SuperAdminController.getUserById);

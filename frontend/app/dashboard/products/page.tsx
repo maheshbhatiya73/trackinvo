@@ -32,7 +32,7 @@ function Page() {
   const [searchQuery, setSearchQuery] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
   const [filteredProducts, setFilteredProducts] = useState<any[]>([])
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<any>({
     name: '',
     price: '',
     category_id: '',
@@ -235,14 +235,14 @@ function Page() {
         <Modal
           isOpen={isDeleteModalOpen}
           onClose={() => {
-            setIsDeleteModalOpen(false);
-            setProductData(null);
-          }}
+            setIsDeleteModalOpen(false)
+            setProductData(null)
+          } }
           title="Confirm Delete"
           width="400px"
           showCloseButton={true}
           onProcess={confirmDeleteProduct}
-        >
+          processLabel={''}        >
           <div className="text-center">
             <p className="text-gray-700 mb-2">
               Are you sure you want to delete this product? This action cannot be undone.

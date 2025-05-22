@@ -819,7 +819,7 @@ export const api = {
     },
 
     // Get all units
-    async getUnits(showToast?: (type: "success" | "error", message: string) => void): Promise<Unit[] | null> {
+    async getUnits(showToast?: (type: "success" | "error", message: string) => void): Promise<any> {
         try {
             const token = getToken();
             if (!token) {
@@ -891,7 +891,7 @@ export const api = {
     async createProduct(
         productData: { name: string; category_id: string; unit_id: string; price: number },
         showToast?: (type: "success" | "error", message: string) => void
-    ): Promise<Product | null> {
+    ): Promise<any> {
         try {
             const token = getToken();
             if (!token) {
@@ -966,7 +966,7 @@ export const api = {
     },
 
     // Delete a product by ID
-    async deleteProductById(id: string, showToast?: (type: "success" | "error", message: string) => void): Promise<void> {
+    async deleteProductById(id: any, showToast?: (type: "success" | "error", message: string) => void): Promise<void> {
         try {
             const token = getToken();
             if (!token) {
@@ -1004,7 +1004,7 @@ export const api = {
     },
 
     // Fetch all products
-    async getProducts(showToast?: (type: "success" | "error", message: string) => void): Promise<Product[] | null> {
+    async getProducts(showToast?: (type: "success" | "error", message: string) => void): Promise<any> {
         try {
             const token = getToken();
             if (!token) {
@@ -1159,7 +1159,7 @@ export const api = {
     },
 
     // Get all customers
-    async getCustomers(): Promise<Customer[]> {
+    async getCustomers(): Promise<any> {
         try {
             const token = getToken();
             if (!token) throw new Error('No authentication token found');

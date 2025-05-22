@@ -1,4 +1,3 @@
-// routes/CategoryRoute.ts
 import express from 'express';
 import CategoryController from '../controller/CategoryController';
 import { authenticateToken, checkRole } from '../middleware/auth';

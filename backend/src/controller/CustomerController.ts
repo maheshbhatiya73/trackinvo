@@ -1,4 +1,4 @@
-// controller/CustomerController.ts
+
 import { Request, Response, NextFunction } from 'express';
 import Customer from '../model/Customer';
 

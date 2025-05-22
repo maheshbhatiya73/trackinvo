@@ -59,10 +59,10 @@ function DashboardPage() {
   const invoiceTrendsData = [
     { month: "Jan", revenue: 1200 },
     { month: "Feb", revenue: 1500 },
-    { month: "Mar", revenue: invoices.reduce((sum, inv) => sum + inv.total_amount, 0) },
+    { month: "Mar", revenue: invoices.reduce((sum, inv:any) => sum + inv.total_amount, 0) },
   ];
 
-  const getStatusBadge = (dueDate) => {
+  const getStatusBadge = (dueDate:any) => {
     const today = new Date();
     const due = new Date(dueDate);
     if (due < today) return "Overdue";
@@ -72,15 +72,15 @@ function DashboardPage() {
   const invoiceStatusData = [
     {
       name: "Paid",
-      value: invoices.filter((inv) => getStatusBadge(inv.due_date) === "Paid").length,
+      value: invoices.filter((inv:any) => getStatusBadge(inv.due_date) === "Paid").length,
     },
     {
       name: "Pending",
-      value: invoices.filter((inv) => getStatusBadge(inv.due_date) === "Pending").length,
+      value: invoices.filter((inv:any) => getStatusBadge(inv.due_date) === "Pending").length,
     },
     {
       name: "Overdue",
-      value: invoices.filter((inv) => getStatusBadge(inv.due_date) === "Overdue").length,
+      value: invoices.filter((inv:any) => getStatusBadge(inv.due_date) === "Overdue").length,
     },
   ];
 
@@ -116,7 +116,7 @@ function DashboardPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {[
             { title: "Total Users", value: users.length, icon: <FiUsers />, color: "bg-blue-500" },
-            { title: "Total Revenue", value: `$${invoices.reduce((sum, inv) => sum + inv.total_amount, 0).toLocaleString()}`, icon: <FiDollarSign />, color: "bg-green-500" },
+            { title: "Total Revenue", value: `$${invoices.reduce((sum, inv:any) => sum + inv.total_amount, 0).toLocaleString()}`, icon: <FiDollarSign />, color: "bg-green-500" },
             { title: "Total Products", value: products.length, icon: <FiBox />, color: "bg-purple-500" },
             { title: "Total Invoices", value: invoices.length, icon: <FiClipboard />, color: "bg-orange-500" },
           ].map((stat, index) => (
@@ -200,9 +200,9 @@ function DashboardPage() {
             </Button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {invoices.slice(0, 3).map((invoice) => (
+            {invoices.slice(0, 3).map((invoice:any, index) => (
               <motion.div
-                key={invoice._id}
+                key={index}
                 whileHover={{ scale: 1.03 }}
                 className="group p-5 bg-gray-50 rounded-lg border border-gray-200 hover:bg-indigo-50 hover:border-indigo-400 transition-all relative overflow-hidden"
               >
@@ -243,7 +243,7 @@ function DashboardPage() {
         >
           <h2 className="text-xl font-semibold text-gray-800 mb-4">Top Products</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {products.slice(0, 3).map((product) => (
+            {products.slice(0, 3).map((product:any) => (
               <motion.div
                 key={product._id}
                 whileHover={{ scale: 1.03 }}
@@ -268,7 +268,7 @@ function DashboardPage() {
         >
           <h2 className="text-xl font-semibold text-gray-800 mb-4">Managers</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {managers.map((manager) => (
+            {managers.map((manager:any) => (
               <motion.div
                 key={manager._id}
                 whileHover={{ scale: 1.03 }}

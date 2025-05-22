@@ -20,7 +20,7 @@ export default function SettingsPage() {
     { _id: "3", description: "Consulting Fee", quantity: 3, unit_price: 200, total_amount: 600, date: "2025-03-10" },
   ];
 
-  const handleLogoUpload = (e) => {
+  const handleLogoUpload = (e:any) => {
     const file = e.target.files[0];
     if (file) {
       setLogo(file);

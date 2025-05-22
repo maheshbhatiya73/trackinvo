@@ -1,4 +1,3 @@
-// middleware/asyncHandler.ts
 import { Request, Response, NextFunction } from 'express';
 
 const asyncHandler = (

@@ -1,4 +1,4 @@
-// controller/InvoiceController.ts
+
 import { Request, Response, NextFunction } from 'express';
 import Customer from '../model/Customer';
 import Product from '../model/Product';

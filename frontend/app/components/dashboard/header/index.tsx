@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { FiBell, FiUser, FiSettings, FiLogOut, FiSearch, FiGlobe } from "react-icons/fi";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/app/hooks/AuthContext";
 
 const Header = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -11,20 +12,23 @@ const Header = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedLang, setSelectedLang] = useState("EN");
   const router = useRouter();
-  const profileDropdownRef = useRef(null);
-  const langDropdownRef = useRef(null);
+  const profileDropdownRef = useRef<HTMLDivElement>(null);
+  const langDropdownRef = useRef<HTMLDivElement>(null);
+  const { logout } = useAuth();
 
-  // Close dropdowns on outside click
   useEffect(() => {
-    function handleClickOutside(event: { target: any; }) {
+    function handleClickOutside(event: MouseEvent) {
       if (
-        (profileDropdownRef.current && !profileDropdownRef.current.contains(event.target)) &&
-        (langDropdownRef.current && !langDropdownRef.current.contains(event.target))
+        profileDropdownRef.current &&
+        !profileDropdownRef.current.contains(event.target as Node) &&
+        langDropdownRef.current &&
+        !langDropdownRef.current.contains(event.target as Node)
       ) {
         setIsProfileOpen(false);
         setIsLangOpen(false);
       }
     }
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -39,12 +43,10 @@ const Header = () => {
     { code: "DE", name: "German" },
   ];
 
-  // Handle search submission
   const handleSearch = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     if (searchQuery.trim()) {
       console.log("Searching for:", searchQuery);
-      // Add your search logic here (e.g., redirect or filter)
     }
   };
 
@@ -164,7 +166,7 @@ const Header = () => {
                 <hr className="my-1" />
                 <div
                   onClick={() => {
-                    // Add logout logic here
+                    logout()
                     setIsProfileOpen(false);
                   }}
                   className="px-3 py-2 text-sm text-red-600 hover:bg-gray-100 rounded-md cursor-pointer flex items-center space-x-2"

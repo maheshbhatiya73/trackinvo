@@ -20,7 +20,7 @@ interface User {
 }
 
 const ProfilePage = () => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<any>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [formData, setFormData] = useState<Partial<User>>({});
   const [loading, setLoading] = useState(true);
@@ -64,11 +64,10 @@ const ProfilePage = () => {
         user._id,
         formData.username || user.username,
         formData.email || user.email,
-        undefined,
         formData.role || user.role,
         formData.status || user.status,
         user.lastLogin,
-        avatarFile
+        avatarFile,
       );
       fetchUserData();
       if (response) {

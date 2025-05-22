@@ -1,4 +1,4 @@
-// models/Customer.ts
+
 import mongoose, { Schema, Document } from 'mongoose';
 
 interface ICustomer extends Document {
